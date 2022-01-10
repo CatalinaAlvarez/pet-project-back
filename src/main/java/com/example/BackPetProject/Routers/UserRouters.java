@@ -4,6 +4,7 @@ import com.example.BackPetProject.DTO.UserDto;
 import com.example.BackPetProject.UseCases.UserUseCases.CreateUserUseCase;
 import com.example.BackPetProject.UseCases.UserUseCases.FindUserByIdUseCase;
 import com.example.BackPetProject.UseCases.UserUseCases.FindUserByNameUseCase;
+import com.example.BackPetProject.UseCases.UserUseCases.UpdateUserUseCase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -47,4 +48,17 @@ public class UserRouters {
                                 .findByName(request.pathVariable("nombre")), UserDto.class))
         );
     }
+
+    @Bean
+    public RouterFunction<ServerResponse> updateUser(UpdateUserUseCase updateUserUseCase){
+        return route(PUT("/usuario/actualizar").and(accept(MediaType.APPLICATION_JSON)),
+                request -> request.bodyToMono(UserDto.class)
+                        .flatMap(updateUserUseCase::updateUser)
+                        .flatMap(result -> ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(result))
+        );
+    }
+
+
 }
