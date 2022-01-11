@@ -27,7 +27,7 @@ public class CreateAnswerUseCase implements CreateAnswer{
     private final FindQuestionByIdUseCase findQuestionByIdUseCase;
 
 
-    public CreateAnswerUseCase(AnswerRepository answerRepository, AnswerMapper answerMapper, SendEmailUseCase sendEmailUseCase, FindUserById findUserById, FindQuestionById findQuestionById, UserRepository userRepository, QuestionRepository questionRepository, QuestionMapper questionMapper, FindQuestionByIdUseCase findQuestionByIdUseCase) {
+    public CreateAnswerUseCase(AnswerRepository answerRepository, AnswerMapper answerMapper, SendEmailUseCase sendEmailUseCase, FindQuestionById findQuestionById, UserRepository userRepository, QuestionRepository questionRepository, QuestionMapper questionMapper, FindQuestionByIdUseCase findQuestionByIdUseCase) {
         this.answerRepository = answerRepository;
         this.answerMapper = answerMapper;
         this.sendEmailUseCase = sendEmailUseCase;
