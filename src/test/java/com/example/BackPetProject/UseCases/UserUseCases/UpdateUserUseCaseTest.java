@@ -2,13 +2,8 @@ package com.example.BackPetProject.UseCases.UserUseCases;
 
 import com.example.BackPetProject.Collections.User;
 import com.example.BackPetProject.DTO.UserDto;
-import com.example.BackPetProject.Enums.Categories;
-import com.example.BackPetProject.Enums.Types;
-import com.example.BackPetProject.Mappers.QuestionMapper;
 import com.example.BackPetProject.Mappers.UserMapper;
-import com.example.BackPetProject.Repositories.QuestionRepository;
 import com.example.BackPetProject.Repositories.UserRepository;
-import com.example.BackPetProject.UseCases.QuestionUseCases.CreateQuestionUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
@@ -18,21 +13,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class CreateUserUseCaseTest {
+class UpdateUserUseCaseTest {
 
     UserRepository userRepository;
     UserMapper userMapper;
-    CreateUserUseCase createUserUseCase;
+    UpdateUserUseCase updateUserUseCase;
 
     @BeforeEach
     public void setUp(){
         UserMapper userMapper = new UserMapper();
         userRepository = mock(UserRepository.class);
-        createUserUseCase = new CreateUserUseCase(userRepository, userMapper);
+        updateUserUseCase = new UpdateUserUseCase(userRepository, userMapper);
     }
 
     @Test
-    void createUserUseCase(){
+    void updateUserUseCase(){
         var user = new User();
         user.setId("xxxx");
         user.setUserName("Cata");
@@ -51,7 +46,7 @@ class CreateUserUseCaseTest {
 
         when(userRepository.save(any())).thenReturn(Mono.just(user));
 
-        StepVerifier.create(createUserUseCase.createUser(userDto))
+        StepVerifier.create(updateUserUseCase.updateUser(userDto))
                 .expectNextMatches(userDto1-> {
                     assert userDto1.getId().equals("xxxx");
                     assert userDto1.getUserName().equals("Cata");
@@ -63,6 +58,7 @@ class CreateUserUseCaseTest {
                     return true;
                 })
                 .verifyComplete();
+
 
         verify(userRepository).save(any());
     }

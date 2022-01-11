@@ -2,13 +2,8 @@ package com.example.BackPetProject.UseCases.UserUseCases;
 
 import com.example.BackPetProject.Collections.User;
 import com.example.BackPetProject.DTO.UserDto;
-import com.example.BackPetProject.Enums.Categories;
-import com.example.BackPetProject.Enums.Types;
-import com.example.BackPetProject.Mappers.QuestionMapper;
 import com.example.BackPetProject.Mappers.UserMapper;
-import com.example.BackPetProject.Repositories.QuestionRepository;
 import com.example.BackPetProject.Repositories.UserRepository;
-import com.example.BackPetProject.UseCases.QuestionUseCases.CreateQuestionUseCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
@@ -18,21 +13,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class CreateUserUseCaseTest {
+class FindUserByNameUseCaseTest {
 
     UserRepository userRepository;
     UserMapper userMapper;
-    CreateUserUseCase createUserUseCase;
+    FindUserByNameUseCase findUserByNameUseCase;
 
     @BeforeEach
     public void setUp(){
         UserMapper userMapper = new UserMapper();
         userRepository = mock(UserRepository.class);
-        createUserUseCase = new CreateUserUseCase(userRepository, userMapper);
+        findUserByNameUseCase = new FindUserByNameUseCase(userRepository, userMapper);
     }
 
     @Test
-    void createUserUseCase(){
+    void findUserByName(){
         var user = new User();
         user.setId("xxxx");
         user.setUserName("Cata");
@@ -41,17 +36,9 @@ class CreateUserUseCaseTest {
         user.setEmail("cata@gmail.com");
         user.setPhoto("url");
 
-        var userDto = new UserDto();
-        user.setId("xxxx");
-        user.setUserName("Cata");
-        user.setFirstNames("Catalina");
-        user.setLastNames("Álvarez");
-        user.setEmail("cata@gmail.com");
-        user.setPhoto("url");
+        when(userRepository.findByUserName(any())).thenReturn(Mono.just(user));
 
-        when(userRepository.save(any())).thenReturn(Mono.just(user));
-
-        StepVerifier.create(createUserUseCase.createUser(userDto))
+        StepVerifier.create(findUserByNameUseCase.findByName("Cata"))
                 .expectNextMatches(userDto1-> {
                     assert userDto1.getId().equals("xxxx");
                     assert userDto1.getUserName().equals("Cata");
@@ -64,7 +51,9 @@ class CreateUserUseCaseTest {
                 })
                 .verifyComplete();
 
-        verify(userRepository).save(any());
+
+        verify(userRepository).findByUserName(any());
     }
+
 
 }

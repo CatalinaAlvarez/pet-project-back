@@ -7,7 +7,7 @@ import com.example.BackPetProject.Mappers.QuestionMapper;
 import com.example.BackPetProject.Repositories.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,13 +16,13 @@ import static org.mockito.Mockito.*;
 class FindAllQuestionsByUserIdUseCaseTest {
 
     QuestionRepository questionRepository;
-    FindQuestionByIdUseCase findQuestionByIdUseCase;
+    FindAllQuestionsByUserIdUseCase findAllQuestionsByUserIdUseCase;
 
     @BeforeEach
     public void setUp(){
         QuestionMapper questionMapper = new QuestionMapper();
         questionRepository = mock(QuestionRepository.class);
-        findQuestionByIdUseCase = new FindQuestionByIdUseCase(questionRepository, questionMapper);
+        findAllQuestionsByUserIdUseCase = new FindAllQuestionsByUserIdUseCase(questionRepository, questionMapper);
     }
 
     @Test
@@ -35,9 +35,9 @@ class FindAllQuestionsByUserIdUseCaseTest {
         question.setCategory(Categories.LANGUAGE);
         question.setQuestionBody("¿Es esta una pregunta de prueba?");
 
-        when(questionRepository.findAllByUserId("123")).thenReturn(Mono.just(question));
+        when(questionRepository.findAllByUserId("xxxx")).thenReturn(Flux.just(question));
 
-        StepVerifier.create(findQuestionByIdUseCase.findQuestionById("xxxx"))
+        StepVerifier.create(findAllQuestionsByUserIdUseCase.findAllByUserId("xxxx"))
                 .expectNextMatches(questionR-> {
                     assert questionR.getUserId().equals("xxxx");
                     assert questionR.getCategory().equals(Categories.LANGUAGE);
@@ -47,7 +47,7 @@ class FindAllQuestionsByUserIdUseCaseTest {
                 })
                 .verifyComplete();
 
-        verify(questionRepository).findById("xxxx");
+        verify(questionRepository).findAllByUserId("xxxx");
     }
 
 }

@@ -48,7 +48,7 @@ class FindQuestionByIdUseCaseTest {
                 })
                 .verifyComplete();
 
-        verify(questionRepository).deleteById("xxxx");
+        verify(questionRepository).findById("123");
 
     }
 
